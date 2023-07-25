@@ -1,0 +1,29 @@
+pipeline {
+    agent none
+
+    stages {
+        stage('Parallel Deployment') {
+            parallel {
+                stage('Dev-Prune') {
+                    agent {
+                        label 'agent-dev'
+                    }
+                    steps {
+                        // Run this command to perform prune
+                        sh 'docker image prune --all -f'
+                    }
+                }
+                stage('Staging-Prune') {
+                    agent {
+                        label 'agent-staging'
+                    }
+                    steps {
+                        // Run this to perform prune on staging
+                        sh 'docker image prune --all -f'
+                    }
+                }
+            }
+        }
+    }
+
+}
